@@ -1,0 +1,36 @@
+
+{% extends "base.html" %}
+{% load i18n utility_tags %}
+{% load staticfiles %}
+
+{% block head_content%}
+{{ block.super }}
+    <!-- Custom styles for this template --> 
+    
+    
+
+{% endblock head_content%}
+
+{% block content %}
+
+<div class="filters">
+  
+    <div class="list-group">
+        <a class="list-group-item{% if not facets.selected.city %} active{% endif %}" href="{% append_to_query city="" page="" %}">{% trans "All" %}</a>
+        {% for cat in facets.categories.cities %}
+            <a class="list-group-item{% if facets.selected.city == cat %} active{% endif %}" href="{% append_to_query city=cat.pk page="" %}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+<div >
+    {% for locale in object_list %}
+        <div >
+            <h3>{{ locale }}</h3>
+        </div>
+    {% endfor %}
+    
+
+
+    
+</form>
+
+{% endblock content%}

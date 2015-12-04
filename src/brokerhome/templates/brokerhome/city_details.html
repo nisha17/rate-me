@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n utility_tags %}
+
+{% block head_content %}
+{{ block.super }}
+
+<link href="{% static 'brokerhome/css/grid.css' %}" rel="stylesheet">
+
+{% endblock head_content %}
+
+{% block content %}
+
+ <h3>{{ city.city_name }}</h3>
+
+<div class="col-sm-8 blog-main">
+<ul>
+{% for br in broker_data%}
+    <div class="row">
+
+        <div class="col-sm-8"> {{br.broker_name}}
+
+          <div class="row">
+            <div class="col-sm-5">{{br.firm_name}}</div>
+            <div class="col-sm-5">{{br.website}}</div>
+            <div class="col-sm-2">
+              <span class="label label-info">{{br.rating}}</span>
+                <a href="{%url 'brokerhome:rating' br.broker_id%}?next={{request.path }}">Rate</a>
+
+              </div>
+          </div>
+
+        </div>
+
+        <div class="col-sm-4" >
+
+                {{br.locale|truncatewords:20}}
+
+                {%if br.locale|length > 20 %}
+                <a href="">more</a>
+            {%endif%}
+
+
+               <!-- <li>{{loc.locale|truncatewords:20}} </li>
+                <a href="">Read more&hellip;</a> -->
+                {# comment #}
+
+
+        </div>
+
+      </div>
+
+{% endfor %}
+</ul>
+</div>
+<div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+     
+ <div class="filters">
+  
+    <div class="list-group">
+        <a class="list-group-item{% if not facets.selected.locale %} active{% endif %}" href="{% append_to_query locale="" page="" %}">{% trans "All" %}</a>
+        {% for cat in facets.categories.localities %}
+            <a class="list-group-item{% if facets.selected.locale == cat %} active{% endif %}" href="{% append_to_query locale=cat.pk page="" %}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+</div >
+</div>
+{% if broker_data.has_other_pages %}
+    <ul class="pagination">
+        {% if broker_data.has_previous %}
+            <li><a href="{% append_to_query page=broker_data.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for page_number in broker_data.paginator.page_range %}
+            {% if page_number == broker_data.number %}
+                <li class="active">
+                    <span>{{ page_number }} <span class="sr-only">(current)</span></span>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% append_to_query page=page_number %}">{{ page_number }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if broker_data.has_next %}
+            <li><a href="{% append_to_query page=broker_data.next_page_number %}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
+{% endif %}
+
+
+{% endblock content%}

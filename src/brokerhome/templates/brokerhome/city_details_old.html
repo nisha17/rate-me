@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head_content %}
+{{ block.super }}
+
+<link href="{% static 'brokerhome/css/grid.css' %}" rel="stylesheet">
+
+{% endblock head_content %}
+
+{% block content %}
+
+ <h3>{{ city.city_name }}</h3>
+<ul>
+
+{% for br in broker_data%}
+    <div class="row">
+
+        <div class="col-sm-8"> {{br.broker_name}}
+
+          <div class="row">
+            <div class="col-sm-4">{{br.firm_name}}</div>
+            <div class="col-sm-4">{{br.website}}</div>
+            <div class="col-sm-4">
+              <span class="label label-info">{{br.rating}}</span>
+                <a href="{%url 'brokerhome:rating' br.broker_id%}?next={{request.path }}">Rate</a>
+
+              </div>
+          </div>
+
+        </div>
+
+        <div class="col-sm-4" >
+
+                {{br.locale|truncatewords:20}}
+
+                {%if br.locale|length > 20 %}
+                <a href="">more</a>
+            {%endif%}
+
+
+               <!-- <li>{{loc.locale|truncatewords:20}} </li>
+                <a href="">Read more&hellip;</a> -->
+                {# comment #}
+
+
+        </div>
+
+      </div>
+{% endfor %}
+</ul>
+{% endblock content%}

@@ -1,0 +1,18 @@
+{% extends parent_template|default:"base.html" %}
+
+
+{% block content %}
+
+{% if latest_city %}
+    <ul id = "horizontal-list">
+    {% for city in latest_city %}
+        <li><a href="{{city.get_absolute_url}}">{{ city.city_name|title }}</a></li>
+
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No cities are listed.</p>
+{% endif %}
+{% endblock content%}
+
+
